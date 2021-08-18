@@ -1,4 +1,5 @@
-// Deposit Handaler
+
+/* // Deposit Handaler
 const dipositBtn = document.getElementById('diposit-Btn')
 dipositBtn.addEventListener('click', function () {
     // Get Deposit Ammount
@@ -83,4 +84,58 @@ withdrawBtn.addEventListener('click', function () {
 //logout button
 document.getElementById('logout').onclick = function () {
     window.location.href = 'index.html'
+} */
+
+//Function to get number from inputField
+function numberIntoInputField(inputFieldId) {
+    const theInputElement = document.getElementById(inputFieldId)
+    const theNumber = parseFloat(theInputElement.value)
+    theInputElement.value = ''
+    return theNumber
 }
+
+// Function to get number into innerText
+function numberIntoInnerText(innerTextID) {
+    const theElement = document.getElementById(innerTextID)
+    const theNumber = parseFloat(theElement.innerText)
+    return theNumber
+}
+
+// function to update balance
+function balanceUpdate(oldBalance, newAmount, isAdd) {
+    if (isAdd == true) {
+        const newBalance = oldBalance + newAmount
+        return newBalance
+    } else {
+        const newBalance = oldBalance - newAmount
+        return newBalance
+    }
+}
+
+// Deposit Button handle
+document.getElementById('diposit-Btn').addEventListener('click', function () {
+    const inputAmount = numberIntoInputField('diposit-input')
+    const newBalance = balanceUpdate(inputAmount, numberIntoInnerText('deposit-amount'), true)
+    const mainBalance = balanceUpdate(numberIntoInnerText('mainBalance'), inputAmount, true)
+    // update Balance
+    if (newBalance > 0) {
+        // update balance to total deposit
+        document.getElementById('deposit-amount').innerText = newBalance
+        //Update balance to main balance
+        document.getElementById('mainBalance').innerText = mainBalance
+    }
+})
+
+// Withdraw Button handle
+document.getElementById('withdrawBtn').addEventListener('click', function () {
+    debugger
+    const inputAmount = numberIntoInputField('withdrawInput')
+    if (inputAmount > 0 && numberIntoInnerText('mainBalance') >= inputAmount) {
+        const newWithdrawBalance = balanceUpdate(numberIntoInnerText('withdrawTotal'), inputAmount, true)
+        //update Total withdraw balance update
+        document.getElementById('withdrawTotal').innerText = newWithdrawBalance
+        // update main balance
+        const mainBalance = balanceUpdate(numberIntoInnerText('mainBalance'), inputAmount, false)
+        document.getElementById('mainBalance').innerText = mainBalance
+    }
+})
